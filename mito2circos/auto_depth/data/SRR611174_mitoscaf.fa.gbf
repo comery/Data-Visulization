@@ -1,0 +1,399 @@
+LOCUS       scaffold2381            1090 bp    DNA     linear       09-JUN-2018
+DEFINITION  Test sp. mitochondrion.
+ACCESSION   
+VERSION
+KEYWORDS    .
+SOURCE      mitochondrion Test sp.
+  ORGANISM  Test sp.
+            Unclassified.
+REFERENCE   1  (bases 1 to 1090)
+  AUTHORS   MENG,G.
+  TITLE     an automatic mitochondrial assembly-annotation-visualization
+            pipeline with NGS data
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 1090)
+  AUTHORS   MENG,G.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (09-JUN-2018) China National GeneBank, BGI-Shenzhen,
+            Beishan Industrial Zone, Beishan Road, Yantian District, Shenzhen,
+            Guangdong 518083, China
+FEATURES             Location/Qualifiers
+     source          1..1090
+                     /organism="Test sp."
+                     /organelle="mitochondrion"
+                     /mol_type="genomic DNA"
+     gene            complement(11..944)
+                     /gene="ND1"
+     CDS             complement(11..944)
+                     /gene="ND1"
+                     /codon_start=1
+                     /transl_table=5
+                     /product="NADH dehydrogenase subunit 1"
+                     /translation="MMLKDMLMIFLGLIILILGVLIGVAFLTLLERKVLGYIQIRKGP
+                     NKVGFIGILQPFSDAIKLFTKEQTYPSFSNYLVYYFSPVVSFILSLMIWMLIPYYYNL
+                     ISFNLGILFFLCCTSMGVYTVMVAGWSSNSNYSLLGGLRAVAQTISYEVSLALILMSS
+                     ILMIMSFNMMKFMIYQNLIWFXNSFKYVLIFF*IGWN*SNSLWFCWGWESVSFWI*HW
+                     M*KSWICFNFFSWMF*NFIYKIINSFDLYSGLWINISILFQNFFNFFFIYLSSWYFTT
+                     MSLW*VNMFSLKNVFAYFFKLFIFLFSIKNYNILL"
+     gene            complement(946..1012)
+                     /gene="trnL(uag)"
+     tRNA            complement(946..1012)
+                     /gene="trnL(uag)"
+                     /product="tRNA-Leu"
+ORIGIN      
+        1 actaaatata ttaataaaat attataattt ttaatcctaa ataaaaaaat aaataattta
+       61 aagaaatagg caaatacatt tttcaagcta aatatattaa cttatcataa cgatatcgtg
+      121 gtaaagtacc acgaactcaa ataaataaaa aagaaattaa agaaattttg aaataaaatc
+      181 ctaatgttaa ttcataaccc cctatataaa tcaaaactat taataatctt ataaataaaa
+      241 ttctagaata ttcagctaaa aaaattaaag caaatccacc tcttctatat tcaatgttaa
+      301 atccagaaac taactctctc tcaccctcag caaaatcata aggagttcga ttagtttcag
+      361 ccaatctaga agaaaatcaa cacatactta aaggaattan taaatcaaat taaattttga
+      421 taaatcataa attttattat attaaaactt ataattatta aaattcttga catcaaaatt
+      481 aaagctaatc taacttcata agaaattgtc tgagctacag ctcgtaaccc ccccaataaa
+      541 gaataattag aattagaaga ccaacccgct actataacag tataaactcc cattcttgta
+      601 caacataaaa aaaataaaat acctaaatta aatctaatta aattataata ataaggaatt
+      661 aatattcaaa ttattaaaga taaaataaaa ctaactaccg gagaaaaata ataaactaaa
+      721 taattagaaa atctaggata agtttgctct ttagtaaata acttaatagc atctgaaaag
+      781 ggctgtaaaa ttccaataaa cccaacctta ttagggcctt tacgaatttg aatataacct
+      841 aaaaccttac gctctaaaag agtcaaaaaa gcaaccccaa tcaaaacccc taaaattaaa
+      901 ataatcaaac ctaaaaaaat tattaatata tctttcagta tcatttacta catatataat
+      961 aaattatata tttatgactt ctaaaatcat tacatttttc tgccaaaata gtctaattat
+     1021 ttacccatct atattatata tttattgtat ataatttaca tatatttata attaaattaa
+     1081 taatattctt
+//
+LOCUS       scaffold2428            2164 bp    DNA     linear       09-JUN-2018
+DEFINITION  Test sp. mitochondrion.
+ACCESSION   
+VERSION
+KEYWORDS    .
+SOURCE      mitochondrion Test sp.
+  ORGANISM  Test sp.
+            Unclassified.
+REFERENCE   1  (bases 1 to 2164)
+  AUTHORS   MENG,G.
+  TITLE     an automatic mitochondrial assembly-annotation-visualization
+            pipeline with NGS data
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 2164)
+  AUTHORS   MENG,G.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (09-JUN-2018) China National GeneBank, BGI-Shenzhen,
+            Beishan Industrial Zone, Beishan Road, Yantian District, Shenzhen,
+            Guangdong 518083, China
+FEATURES             Location/Qualifiers
+     source          1..2164
+                     /organism="Test sp."
+                     /organelle="mitochondrion"
+                     /mol_type="genomic DNA"
+     gene            complement(2..236)
+                     /gene="ND4L"
+     CDS             complement(2..236)
+                     /gene="ND4L"
+                     /note="TAA stop codon is completed by the addition of 3'
+                     Aresidues to the mRNA"
+                     /codon_start=1
+                     /transl_table=5
+                     /product="NADH dehydrogenase subunit 4L"
+                     /translation="MMIFINMLLVSIFMFIIGLMIFVSKHKHLLVVLLSLEFIVLGIF
+                     LEMMMVFNYVNFDMYMLMVFLVFSVCEGALGLSI"
+     gene            239..304
+                     /gene="trnT(ugu)"
+     tRNA            239..304
+                     /gene="trnT(ugu)"
+                     /product="tRNA-Thr"
+     gene            complement(305..369)
+                     /gene="trnP(ugg)"
+     tRNA            complement(305..369)
+                     /gene="trnP(ugg)"
+                     /product="tRNA-Pro"
+     gene            372..904
+                     /gene="ND6"
+     CDS             372..904
+                     /gene="ND6"
+                     /codon_start=1
+                     /transl_table=5
+                     /product="NADH dehydrogenase subunit 6"
+                     /translation="MKLFLSLLIIIISFLMVFLHHPLSMGLMILMQTLLVCLMSGMII
+                     STYWFSYILFLTFLGGLLIMFIYISSIASNEMFKINLNMLITFFLLLIMIISITMLLN
+                     NNLTWLNLSNNNDMSNFFNLFLFFNNENKINLSKLYNNQTFLLMMIMMIYLLITLIXX
+                     X*KLLMFSTAPYDHQLT"
+     gene            904..2049
+                     /gene="CYTB"
+     CDS             904..2049
+                     /gene="CYTB"
+                     /codon_start=1
+                     /transl_table=5
+                     /product="cytochrome b"
+                     /translation="MMNMYKPIRKNHPIIKIINGSLIDLPTPSNISSLWNFGSLLALC
+                     LIIQIITGLFLTMYYTANIELAFYSVNYICRNVNYGWLIRTLHANGASFFFICIYIHI
+                     GRGIYYESFNFKLTWMVGVIILFLLMATAFMGYVLPWGQMSFWGATVITNLLSAIPYL
+                     GNMLVNWIWGGFAIDNATLTRFYTFHFILPFIILMMTMIHLLFLHQTGSNNPLGINSN
+                     FDKIPFHPFFTFKDLIGFIILLFILSILTLTNPYLLGDPDNFIPANPLVTPIHIQPEW
+                     YFLFAYAILRSIPNKLGGVIALVMSILILIILPFTFYKKIQGNQFYPINQLLFWCMVM
+                     IIILLTWIGARPVEDPYIITGQILTILYFLYYILNPLINFYWDNLIY"
+     gene            2048..2112
+                     /gene="trnS(uga)"
+     tRNA            2048..2112
+                     /gene="trnS(uga)"
+                     /product="tRNA-Ser"
+ORIGIN      
+        1 aaaattgata aacctaaagc cccctcacaa acagaaaaaa ctaaaaaaac cattaatata
+       61 tatatatcaa aattaacata attaaatact attattattt ctaaaaaaat tcctaaaaca
+      121 ataaactcta atcttaataa tactactaat aaatgtttgt gcttagaaac aaaaattatt
+      181 aacccaataa taaatataaa aatagaaact aataatatat taataaaaat tatcattagt
+      241 ttttatagtt taaaaaaaaa acattggtct tgtaaatcaa aaataagact tttctttaag
+      301 aacttcaaag aaaaagaaat ttctttatct ataatctcca aaattattat ttttataaac
+      361 tattctttga aataaaatta tttttatcct tattaattat tatcatttct tttttaatag
+      421 tatttctcca ccatccacta tctataggat taataatttt aatacaaact ttactagtat
+      481 gtttaatatc aggtataatt attagaactt attgattttc atatattctt ttcttaacat
+      541 ttttaggagg attattaatt atatttattt atatttctag tatcgcctca aatgaaatat
+      601 tcaaaattaa tttaaatata ctaattactt tttttttact tcttattata attattagta
+      661 tcacaatact actcaataat aatttaactt gattaaatct atcaaacaat aatgatataa
+      721 gaaatttttt caatttattt ttatttttta acaatgaaaa taaaattaat ttatctaaat
+      781 tatataataa tcaaactttt ttattaataa taattataat aatttattta cttattactt
+      841 taattnnnnn nntgtaaaaa ttattaatat tttctacggc cccttacgat catcaattaa
+      901 ctaatgataa atatatataa acctattcga aaaaatcacc ctattattaa aattattaat
+      961 ggatctttaa ttgatttacc tactccttct aatatttcat ctttatgaaa tttcggatca
+     1021 ttactagcac tatgtcttat tattcaaatt attacaggat tatttttaac tatatactat
+     1081 actgctaata ttgaattagc attttacaga gtaaattata tttgtcgaaa tgtaaattac
+     1141 ggttgattaa ttcgaacact tcatgccaat ggagcatcat ttttttttat ctgtatttac
+     1201 attcatattg gacgaggaat ttattatgaa tcatttaact ttaaattaac ttgaatagta
+     1261 ggggtaatta ttttattttt actaatagca acagcattta taggttatgt tctaccttga
+     1321 ggccaaatat cattttgagg ggctacagta attactaatc ttctttcagc aatcccttat
+     1381 ttaggtaata tattagtcaa ttgaatttga ggtgggtttg ctattgataa cgcaacttta
+     1441 actcgatttt atactttcca ttttatctta ccatttatta ttttaataat aactataatt
+     1501 catttacttt ttcttcatca aacaggttca aacaaccctc taggaattaa tagaaatttt
+     1561 gataaaattc cattccatcc attttttact ttcaaagatt taattggatt tattatttta
+     1621 ttatttattt tatctatttt aactcttact aatccctact tattagggga cccagataat
+     1681 tttatcccag ctaatccgtt agtaaccccc atccacattc aacctgaatg atatttttta
+     1741 tttgcatacg caattttacg ctcaatccca aataaacttg gaggtgtgat tgctctagta
+     1801 atatcaattt taattttaat tatccttcca tttacttttt ataaaaaaat tcaaggtaat
+     1861 caattctatc ctattaatca actattattt tgatgtatag taataattat tattttactt
+     1921 acttgaattg gagctcgacc tgtagaagac ccatatatta tcacaggaca aattttaact
+     1981 attttatatt ttttatatta tattttaaac ccattaatta acttttattg agataactta
+     2041 atctattaat taatgagctt gtataagcat ttgttttgaa aacttaagaa agaattataa
+     2101 ttctattaat ttatactaaa tatattaata aaatattata atttttaatc ctaaataaaa
+     2161 aaat
+//
+LOCUS       scaffold2550            2584 bp    DNA     linear       09-JUN-2018
+DEFINITION  Test sp. mitochondrion.
+ACCESSION   
+VERSION
+KEYWORDS    .
+SOURCE      mitochondrion Test sp.
+  ORGANISM  Test sp.
+            Unclassified.
+REFERENCE   1  (bases 1 to 2584)
+  AUTHORS   MENG,G.
+  TITLE     an automatic mitochondrial assembly-annotation-visualization
+            pipeline with NGS data
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 2584)
+  AUTHORS   MENG,G.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (09-JUN-2018) China National GeneBank, BGI-Shenzhen,
+            Beishan Industrial Zone, Beishan Road, Yantian District, Shenzhen,
+            Guangdong 518083, China
+FEATURES             Location/Qualifiers
+     source          1..2584
+                     /organism="Test sp."
+                     /organelle="mitochondrion"
+                     /mol_type="genomic DNA"
+     gene            complement(1..91)
+                     /gene="ATP8"
+     CDS             complement(1..91)
+                     /gene="ATP8"
+                     /note="TAA stop codon is completed by the addition of 3'
+                     Aresidues to the mRNA"
+                     /codon_start=1
+                     /transl_table=5
+                     /product="ATP synthase F0 subunit 8"
+                     /translation="MPQMMPINWIISLLFFITMFIIFNIMNYYI"
+     gene            complement(92..158)
+                     /gene="trnD(guc)"
+     tRNA            complement(92..158)
+                     /gene="trnD(guc)"
+                     /product="tRNA-Asp"
+     gene            complement(159..229)
+                     /gene="trnK(cuu)"
+     tRNA            complement(159..229)
+                     /gene="trnK(cuu)"
+                     /product="tRNA-Lys"
+     gene            complement(230..911)
+                     /gene="COX2"
+     CDS             complement(230..911)
+                     /gene="COX2"
+                     /note="TAA stop codon is completed by the addition of 3'
+                     Aresidues to the mRNA"
+                     /codon_start=1
+                     /transl_table=5
+                     /product="cytochrome c oxidase subunit II"
+                     /translation="MATWSNLNLQNGASPLMEQIIFFHDHTLIILIMITILIGYLMLN
+                     LFFNKYINRFLLEGQMIELIWTVIPAFTLIFIALPSLRLLYLLDELNNPLITLKSIGH
+                     QWYWSYEYSDFNNVEFDSYMIPSKDLKNDNFRLLDVDNRVILPMNNQIRIMVTATDVI
+                     HSWTIPSMGVKVDANPGRLNQTNFFINRPGIYYGQCSEICGANHSFMPILIESIPLKN
+                     FINWINNYS"
+     gene            complement(912..978)
+                     /gene="trnL(uaa)"
+     tRNA            complement(912..978)
+                     /gene="trnL(uaa)"
+                     /product="tRNA-Leu"
+     gene            complement(<1064..2559)
+                     /gene="COX1"
+     CDS             complement(<1064..2559)
+                     /gene="COX1"
+                     /codon_start=1
+                     /transl_table=5
+                     /product="cytochrome c oxidase subunit I"
+                     /translation="MKKKMILVNKFTVYRLTSAILFYCENDFTQQIMKMLELYILFLV
+                     FEQV*LEHLLDF*FVLN*ELQDL*LGMIKFMMPLLQLMHLL*FFL*LYQL*LVDLEID
+                     *YL*Y*GLLM*LSHE*MM*DFEYYPPL*LY*FLEELLKMELEQVEQCTPHYHLMLLTL
+                     EVQ*I*QFSLYI*LEFLQF*VLLILLLQLLMYELMVFHLIKYLYLFDP*VLQLYYYFY
+                     LYQY*LEQLQYY*PIEI*MHLFLILLVVEIQFFTNIYFDFLVTQKYMF*FFLDLV*FL
+                     TLFHKKEEKSKLLVV*V*FML**QLDYLDL*YELIMYLQLV*MLMPELILLRQQ*SLP
+                     YQQELKFSDD*LLYMEHKLIMALQLFEV*DLYFYLLSED*PE*F*LILQLM*LYMMLI
+                     M**LTFTMFYL*EQYLLLLQDLFTDTHF*QD*P*ILTY*KFNF*LYS*G*I*HFSLNI
+                     F*G*QVYHDDTQIIQMFMFLEMLFHL*DHMFHY*QLYFYLLLYESQ*LT"
+     gene            2495..2561
+                     /gene="trnY(gua)"
+     tRNA            2495..2561
+                     /gene="trnY(gua)"
+                     /product="tRNA-Tyr"
+ORIGIN      
+        1 aaatataata atttataata ttaaaaataa taaatattgt aataaaaaat aataaggaaa
+       61 taattcaatt aataggtatt atttgaggga taaaagaata ttatacttat aataatttaa
+      121 atttgacata tttatgttat ttatttaact aattctttcc attagaaata agtgctaatt
+      181 tattatgaaa tggtttaaga gaccagtact tgctttcagt catctaatga agaataatta
+      241 ttaattcaat taataaaatt tttaagtggg attctttcaa ttagaatagg tataaatcta
+      301 tgattagctc cacaaatttc tgaacattga ccataataaa ttccaggtcg attaataaag
+      361 aaattggttt ggtttaatcg gcctgggtta gcatctactt ttacccctat agatgggatt
+      421 gttcaagaat gaataacgtc tgtagctgta actataattc gaatttggtt atttataggt
+      481 aaaataactc gattatctac atctaataaa cgaaaattat cattttttag atcttttgat
+      541 ggaattatat aggaatcaaa ttcaacattg ttaaaatctg aatattcata acttcaatat
+      601 cattgatggc caattgattt taaggtaata agagggttat taagttcatc aagaagatat
+      661 aataatcgaa gagatggaag tgcaataaag attaaagtaa aagctggaat aactgttcaa
+      721 attagttcaa ttatttgtcc ttctaataag aatcgattga tatatttgtt aaaaaataaa
+      781 tttaatatta aatatccaat taaaattgta attataatta aaataattaa tgtatgatca
+      841 tgaaaaaaga taatttgttc tattaaaggt gaggctccat tttgaagatt gagatttgat
+      901 catgttgcta tttctaaaaa aaggataaac ctttatagat ggggtttaaa tccattacat
+      961 ataatctgcc atattagaaa attcttaaaa ttggtaattc attataagaa tgttcagcag
+     1021 nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnnnnnnnnn nnggttaatt attgactctc
+     1081 atacaataat aagtaaaagt ataattgcta ataatgaaat atatgatcct aaagatgaaa
+     1141 taatatttca agaaatataa atatctggat aatctgagta tcgtcgtggt atacctgcta
+     1201 accctaaaaa atgttgaggg aaaaatgtta aatttacccc taagaatata attaaaaatt
+     1261 gaatttttaa tatgtaagga tttagggtta atcctgttaa aagtgggtat cagtgaataa
+     1321 atcttgcaat aatagcaaat actgctccta tagataaaac atagtgaaag tgagctacta
+     1381 cataataagt atcatgtaaa gctacatcaa ttgaagaatt agctaaaatt actccggtta
+     1441 atcctccgac agtaaataaa aatacaaatc ctaaacttca aagagttgaa gggctataat
+     1501 taatttgtgt tccatgtaaa gtagctaatc atctgaaaat tttaattcct gttggtacgg
+     1561 caatgattat tgttgccgaa gtaaaataag ctcgggtatc aatatctata ccaactgtaa
+     1621 atatatgatg agctcatact acaaatccaa gtaatccaat tgctattata gcataaatta
+     1681 tacctaaaca accaaaagtt tccttttttc ctctttcttg tgaaataatg tgagaaatta
+     1741 taccaaatcc aggaagaatt aaaatatata cttctgggtg accaaaaaat caaaataaat
+     1801 gttggtaaag aattggatct ccaccaccag caggatcaaa aaaagatgta tttaaatttc
+     1861 gatcggttaa taatattgta attgctccag ctaatactgg tagagataga agtaataata
+     1921 aagctgtaat acctacggat caaacaaata aaggtatttg atcaaatgaa agaccattaa
+     1981 ttcgtatatt aataattgta gtaataaaat taatagcacc tagaattgaa gaaattccag
+     2041 ctaaatgtaa agagaaaatt gctaaatcta ctgaacttcc agcgtgagca atattagatg
+     2101 atagtggggg gtacactgtt caacctgttc cagctccatt ttcaacaatt cttctagaaa
+     2161 ttagtaaagt taaagagggg ggtaatattc aaaatcttat attatttatt cgtgggaaag
+     2221 ctatatcagg agcccctaat attaaaggta ctaatcaatt tccaaatcca ccaattataa
+     2281 ttggtataac tataaaaaaa attataataa atgcatgagc tgtaacaatg gtattataaa
+     2341 tttgatcatc cccaattaaa gatcctggag ttcctaattc agcacgaatt aaaagtctaa
+     2401 gagatgttcc aattatacct gctcaaatac caaaaataaa atataaagtt ccaatatctt
+     2461 tatgatttgt tgagtaaagt cattttcgca ataaaataaa atggctgagg ttaagcgata
+     2521 aactgtaaat ttattaacaa gaattatttt cttttttatt aataaaataa ttatttatta
+     2581 ttat
+//
+LOCUS       C42857                  1724 bp    DNA     linear       09-JUN-2018
+DEFINITION  Test sp. mitochondrion.
+ACCESSION   
+VERSION
+KEYWORDS    .
+SOURCE      mitochondrion Test sp.
+  ORGANISM  Test sp.
+            Unclassified.
+REFERENCE   1  (bases 1 to 1724)
+  AUTHORS   MENG,G.
+  TITLE     an automatic mitochondrial assembly-annotation-visualization
+            pipeline with NGS data
+  JOURNAL   Unpublished
+REFERENCE   2  (bases 1 to 1724)
+  AUTHORS   MENG,G.
+  TITLE     Direct Submission
+  JOURNAL   Submitted (09-JUN-2018) China National GeneBank, BGI-Shenzhen,
+            Beishan Industrial Zone, Beishan Road, Yantian District, Shenzhen,
+            Guangdong 518083, China
+FEATURES             Location/Qualifiers
+     source          1..1724
+                     /organism="Test sp."
+                     /organelle="mitochondrion"
+                     /mol_type="genomic DNA"
+     gene            84..764
+                     /gene="ATP6"
+     CDS             84..764
+                     /gene="ATP6"
+                     /codon_start=1
+                     /transl_table=5
+                     /product="ATP synthase F0 subunit 6"
+                     /translation="MMNNLFSIFDPSTNLFNLPLNWISTFIGLMFIPYSFWLIPNRHF
+                     IFWNFILNKLHSEFKMLINNKNSNNGSTFIFISMFSFILFNNFLGLFPYIFTSTSHLT
+                     LTLSLSLPLWLSFMIYGWINNTQHMFIHMIPQETPTILMPFMVMIETISNLIRPGTLA
+                     VRLTANMIAGHLLMTLLSSTGPSMPYYFIFILLIVQILLLILESAVAVIQSYVIAILS
+                     TLYSSEVN"
+     gene            764..1552
+                     /gene="COX3"
+     CDS             764..1552
+                     /gene="COX3"
+                     /codon_start=1
+                     /transl_table=5
+                     /product="cytochrome c oxidase subunit III"
+                     /translation="MKNNFNHPYHLVDFSPWPLTGAIGTMTLVTGMVKWFHNFNMNLL
+                     ILGYIIVILTMFQWWRDICREGTLQGKHTILVTKGLKWGMILFIISEIFFFVSFFWAF
+                     FHSSLSPNIEIGSMWPPLGIMPFNPFQIPLLNTIILITSGITITWAHHAIMMNNYNQM
+                     TQGLFFTIVLGIYFTILQAYEYIEAPFTIADSIYGSTFFMATGFHGLHVIIGTTFLLI
+                     CLIRHLKNHFSNNHHFGFEAAAWYWHFVDVVWLFLYISIYWWGN"
+     gene            1555..1621
+                     /gene="trnG(ucc)"
+     tRNA            1555..1621
+                     /gene="trnG(ucc)"
+                     /product="tRNA-Gly"
+     gene            1622..>1723
+                     /gene="ND3"
+     CDS             1622..>1723
+                     /gene="ND3"
+                     /codon_start=1
+                     /transl_table=5
+                     /product="NADH dehydrogenase subunit 3"
+                     /translation="MLMMTYISILIILISNIMMFLSIILSKKTFSDRE"
+ORIGIN      
+        1 ataaattatt atatttttat taataaaatt aataataatt ctaaaaattt tacaattcaa
+       61 aataaaaaaa attttaactg aaaatgataa ataatttatt ttctattttt gacccatcaa
+      121 caaacttatt taatttacca ctaaattgaa ttagaacttt tattggatta atatttattc
+      181 cttattcatt ctgattaatc cccaaccgtc attttatttt ttgaaatttt attttaaata
+      241 aattacatag agaatttaaa atattaatta ataataaaaa ttcaaataac ggatcaacat
+      301 ttatttttat ttcaatattt tcatttattc tttttaataa tttcttagga ttatttccat
+      361 acatttttac tagaactaga catctcactc taactttatc tctttctcta cctctttgat
+      421 taagatttat aatttatggt tgaatcaaca atactcaaca tatatttatt cacataattc
+      481 ctcaagaaac gccaacaatt ttaatacctt tcatagtaat aattgaaact attagaaatt
+      541 taatccgacc aggaactcta gctgttcgtt taacagctaa tataattgca ggtcatttac
+      601 taataacact tttaagaagt actggaccaa gtatacctta ttattttatt tttattttat
+      661 taattgttca aattttacta ttaattttag aatcagcagt tgcggttatt caatcatatg
+      721 taattgccat tttaagaact ctttattcta gtgaagtaaa ctaatgaaaa acaattttaa
+      781 tcacccctat catcttgttg attttagccc atgaccttta actggagcta ttggaactat
+      841 aactttagtg acaggtatag taaaatgatt ccataatttt aacataaatc ttttaatttt
+      901 aggttatatt attgttattc taacaatatt tcaatgatga cgagatattt gtcgagaagg
+      961 aacccttcaa ggtaaacata caatcttagt aacaaaagga ttaaaatgag gaatgatctt
+     1021 atttattatc tctgaaattt ttttttttgt atctttcttt tgagcatttt ttcatagtag
+     1081 gctatcccct aatattgaaa ttggatctat gtgaccccct ttaggaatta taccatttaa
+     1141 cccattccaa atcccactat taaacaccat tattttaatt acctcaggaa ttactattac
+     1201 ttgggcccat cacgcaatta taataaataa ttataatcaa ataactcaag gattattttt
+     1261 tactattgta ctaggaattt attttaccat tcttcaagca tacgaatata ttgaagctcc
+     1321 atttactatt gctgatagaa tttacggatc aacatttttc atagcaactg gatttcatgg
+     1381 attacatgtt atcattggaa caacattttt attaatttgc ttaattcgac atttaaaaaa
+     1441 tcacttttct aataaccatc attttggatt tgaagccgca gcatgatatt gacattttgt
+     1501 agatgtagta tgattattct tatacatctc aatttattga tgaggaaatt aattatttat
+     1561 ataatatatt tagtatattt gatttccaat caaaaagttt aattttattt taatataaat
+     1621 aattcttata ataacttata tttctatttt aattatttta atttcaaata tcataatatt
+     1681 tttatctatc attctctcta aaaaaacttt ttcagatcga gaaa
+//

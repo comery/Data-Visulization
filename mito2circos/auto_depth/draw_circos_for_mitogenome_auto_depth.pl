@@ -14,7 +14,7 @@ use Statistics::Descriptive;
 =head1 Author :
 	YangChentao yangchentao@genomics.cn 2017/05/08
 
-=head1 options
+=head1 Options
 	*--gb 	<str>	*.mitogenome.gb
 	*--conf	<str>	*.conf
 	--help		display this help information
@@ -22,11 +22,14 @@ use Statistics::Descriptive;
 =head1 Usage
 	perl draw_circos_for_mitogenome_auto_depth.pl  -gb <*.mitogenome.gb> -conf <*.conf> 
 
-    configure example: $Bin/mitogenome.auto_depth.conf.txt
+    configure example: 
+    $Bin/mitogenome.auto_depth.conf.txt
 
-=head1 attention
-	~ If you want to draw depth part, wel you need set "fq = /path", and It 
-	will calculate depth value antomatically
+=head1 Attention
+	~ If you want to draw depth part, you need set in two ways:
+	1. set "depth_file = xxx" ;
+	2. set "depth = yes" and "fq = /yourpath/..."; 
+	if set 1,2 in the same time, program will use 1.
 
 =cut
 
@@ -42,11 +45,11 @@ GetOptions(
 die `pod2text $0` if ($help || !$gbfile );
 
 $warn = <<_WARN_;
-#-------------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------
 WARNNING:
          No configure file!
          Here is a sample: $Bin/mitogenome.auto_depth.conf
-#-------------------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------
 _WARN_
 
 
@@ -57,44 +60,113 @@ open CC, "$configure";	# circos_path,win,cds,rRNA,tRNA,locus_color,label_color,g
 while (<CC>){
 	next if (/^#/);
 	next if (/^\s*$/);
-	s/\s//g;
 	chomp;
 	my @cc = split /=/,$_;
+	$cc[0] =~ s/\s//g;
+	if (/opts_samtools/) {
+		$cc[1] =~ s/^\s+//;
+		$cc[1] =~ s/\s+$//;
+	}else{
+		$cc[1] =~ s/\s//g;
+		s/\s//g;
+	}
 	$conf{$cc[0]} = $cc[1];
 
 }
+
 close CC;
 $outdir = $conf{'outdir'};
 $outdir = abs_path($outdir);
 
 ## check configure
-die "circos path is bad!" unless ( -e $conf{'circos_path'} ) ;
+die "circos path is bad !" if ( ! $conf{'circos_path'} ) ;
+# outdir 
+`[ -d $outdir ] || mkdir $outdir`;
 
-$conf{'win'} = 50 if (! $conf{'win'});
+$conf{'win'} = 50 if (! $conf{'win'}); # slipping windows size for GC content, default=50 bp
 $conf{'gc'} = 'yes' if (! $conf{'gc'});
 $conf{'depth'} = 'yes' if (! $conf{'depth'});
 $conf{'base'} = 'no' if (! $conf{'base'});
+$conf{'threads'} ||= 2;
 
-if ($conf{'depth'} eq 'yes'){
-	die "bwa path is bad !" unless ( -e $conf{'bwa'} ) ;
-	die "samtools path is bad !" unless ( -e $conf{'samtools'} ) ;
+$conf{'opts_samtools'} ||= '' ; # optional arguments for samtools.
+my $opts_samtools;
+if ($conf{'opts_samtools'}){
+	$opts_samtools = $conf{'opts_samtools'};
+
 }
 
-die "Fastq file is necessary in configures when you set \"depth = yes\"" if ($conf{'depth'} eq 'yes' && !$conf{'fq'}) ;
 
-`[ -d $outdir ] || mkdir $outdir`;
+if ($conf{'depth'} eq 'yes'){
+	die "bwa path is bad!" if ( ! $conf{'bwa'} ) ;
+	die "samtools path is bad!" if ( ! $conf{'samtools'} ) ;
+}
+
+if ($conf{'depth'} eq 'yes' && !$conf{'fq'}) {
+	die "Fastq file is necessary in configures when you set \"depth = yes\"" ;
+}
+
+# calculate depth
+	my $bwa = $conf{'bwa'} ;
+	my $samtools = $conf{'samtools'};
+
+	my $mapping_on = 0;
+	if ($conf{'depth_file'} and $conf{'depth'} eq 'yes'){
+		print "WARNNING: you set both depth_file and depth = yes, so I will just use existed depth file\n";
+
+	}elsif ($conf{'depth_file'}) {
+
+		$mapping_on = 0; # still 0
+
+	}elsif ($conf{'depth'} eq 'yes') {
+			
+			$mapping_on = 1;
+	}
+if ($mapping_on && $conf{'fq'}) {
+	open FA,">$outdir/circos.mito.fa";
+	open MAP, ">$outdir/circos.map.sh";
+	my @fq = split /,/,$conf{'fq'} ;
+	die "fastq_1 is bad file!" unless (-e $fq[0]) ;
+	die "fastq_2 is bad file!" unless (-e $fq[1]) ;
+	my $fq1 = abs_path($fq[0]);
+	my $fq2 = abs_path($fq[1]);
+
+	print MAP "$bwa index $outdir/circos.mito.fa \n";
+	print MAP "$bwa mem -t $conf{'threads'} $outdir/circos.mito.fa $fq1  $fq2 |samtools view -bS -q 30 -h -o $outdir/circos.bam\n";
+	print MAP "$samtools sort $outdir/circos.bam -o $outdir/circos.sorted.bam\n";
+	print MAP "$samtools depth $opts_samtools $outdir/circos.sorted.bam > $outdir/circos.dep\n";
+	print MAP "awk \'{print \$1\,\$2,\$2,\$3}\' $outdir/circos.dep > $outdir/circos.depth.txt\n";
+
+}
+
+if ($conf{'base'} eq 'yes') {
+	open BASE,">$outdir/circos.base.txt";
+}
+
+if ($conf{'gc'} eq 'yes') {
+	open GC,">$outdir/circos.fa.gc.txt";
+}
 
 ### read genebank file 
 # whether link chromsome as a whole according to topology[linear|circular] of mitogenome.
-my (%breaks,%topology);
+my %topology;
 my $locus_line = `grep 'LOCUS' $gbfile `;
 chomp $locus_line;
 my @lines = split /\n/,$locus_line;
+my $submitos = @lines;
+print "WARNNING: $submitos sequences will be presented on circos figure.\n";
 
-die "Sorry It can just accept only one object in $gbfile because fastq files are just in one pair!" if (@lines > 1);
+# open file handles
+open KAR,">$outdir/circos.karyotype.txt";
+open FEA,">$outdir/circos.features.txt"; # location information
+open TEXT,">$outdir/circos.gene.text.txt"; # gene name text
 
+open ORI,">$outdir/circos.strand.text.txt"; # strand label
+print ORI "mt1\t0\t300\t+\tr0=1r-150p,r1=1r-100p\n";
+close ORI;
+
+my $break;
 foreach my $l(@lines) {
-	my $break;
 	my $a = (split/\s+/,$l)[1];
 	my $topo = (split/\s+/,$l)[5];
 	$topology{$a} = $topo;
@@ -103,68 +175,54 @@ foreach my $l(@lines) {
 	}else {
 		$break = "0.5r";
 	}
-	$breaks{$a} = $break;
 }
 # get cds rRNA tRNA's location and strand information
 my $in = Bio::SeqIO-> new(-file => "$gbfile", "-format" => 'genbank');
-while (my $seq_obj=$in->next_seq()) {
+
+my $id = 0;
+my ($chr,$mt);
+
+#my %hash;
+#while (my $object=$in->next_seq()) {
 	
+#	my $sequence_len = $object->length;
+#	$hash{\$object} = $sequence_len;
+#}
+
+#my @sorted = sort{length($hash{$b}) <=> length($hash{$a}) or $a cmp $b} keys %hash;
+
+#foreach my $k(@sorted){
+#	print "$k\n";
+while (my $seq_obj=$in->next_seq()) {
+
 	my $source = $seq_obj->seq;
 	my $sou_len = $seq_obj->length;
 	my $locus = $seq_obj -> display_id;
-
-	open KAR,">$outdir/$locus.karyotype.txt";
-	print KAR "chr1 - mt1\t$locus-$topology{$locus}\t0\t$sou_len\tgrey";
-	close KAR;
+	$id ++;
+	$chr = "chr" . $id;
+	$mt = "mt" . $id;
+	
+	#print KAR "$chr - $mt\t$locus-$topology{$locus}\t0\t$sou_len\tgrey\n";
+	print KAR "$chr - $mt\t$locus\t0\t$sou_len\tgrey\n";
+	
+	if ($mapping_on && $conf{'fq'}) {
 		
-	# calculate depth
-	my $bwa = $conf{'bwa'} ;
-	my $samtools = $conf{'samtools'};
-	if ($conf{'depth'} eq 'yes' && $conf{'fq'}) {
-		
-		open FA,">$outdir/$locus.mito.fa";
-		print FA ">$locus\n$source";
-		close FA;
+		print FA ">$mt\n$source\n";
 
-		my @fq = split /,/,$conf{'fq'} ;
-		die "fastq_1 is bad file!" unless (-e $fq[0]) ;
-		die "fastq_2 is bad file!" unless (-e $fq[1]) ;
-		my $fq1 = abs_path($fq[0]);
-		my $fq2 = abs_path($fq[1]);
-		open MAP, ">$outdir/$locus.map.sh";
-		print MAP "$bwa index $outdir/$locus.mito.fa \n";
-		print MAP "$bwa mem -t 4 $outdir/$locus.mito.fa $fq1  $fq2 |samtools view -bS -q 30 -h -o $outdir/$locus.bam\n";
-		print MAP "$samtools sort $outdir/$locus.bam -o $outdir/$locus.sorted.bam\n";
-		print MAP "$samtools depth $outdir/$locus.sorted.bam > $outdir/$locus.dep\n";
-		print MAP "awk \'{print \"mt1\",\$2,\$2,\$3}\' $outdir/$locus.dep > $outdir/$locus.depth.txt\n";
-		close MAP;
-
-		#system("perl /hwfssz1/ST_DIVERSITY/PUB/USER/yangchentao/perlscript/qsub-sge.pl --queue $conf{'q'} --resource vf=$conf{'vf'},p=4 -lines 7 -P $conf{'P'} $outdir/$locus.map.sh");
-		print STDERR "run mapping shell\n";
-		system("sh $outdir/$locus.map.sh");
-}
-
-	# check map result
-	if ($conf{'depth'} eq 'yes'){
-		die "Something wrong with mapping process!" unless ( -s "$outdir/$locus.depth.txt") ;
 	}
 
 
 	if ($conf{'base'} eq 'yes') {
-		open BASE,">$outdir/$locus.base.txt";
 		my @base = split//,$source;
 		# output base 
 		foreach my $i(0..$#base) {
 			my $j = $i +1;
-			print BASE "mt1\t$j\t$j\t$base[$i]\n";
+			print BASE "$mt\t$j\t$j\t$base[$i]\n";
 		}
-
 	}
-	close BASE;
 	
 	#calculate GC content
 	if ($conf{'gc'} eq 'yes') {
-		open GC,">$outdir/$locus.fa.gc.txt";
 		my $win = $conf{'win'};
 		for (my $i = 0; $i < $sou_len - $win -1; $i+=$win) {
 			my $tmp = substr($source,$i,$win);
@@ -172,21 +230,13 @@ while (my $seq_obj=$in->next_seq()) {
 			my $GC = $gc_num/$win;
 			my $start = $i +1 ;
 			my $end = $i + $win ;
-			print GC "mt1\t$start\t$end\t$GC\n";
+			print GC "$mt\t$start\t$end\t$GC\n";
 		}	
-
 	}
-	close GC;
 
-	open ORI,">$outdir/$locus.strand.text.txt"; # strand label
-	print ORI "mt1\t0\t10\t+\tr0=1r-200p,r1=1r-100p\n";
-	#print ORI "mt1\t0\t300\t-\tr0=1r+100p,r1=1r+150p";
-	close ORI;
+	#print ORI "$mt\t0\t300\t+\tr0=1r-200p,r1=1r-100p\n";
+	#print ORI "$mt\t0\t300\t-\tr0=1r+100p,r1=1r+150p\n";
 	
-	open FEA,">$outdir/$locus.features.txt"; # location information
-	
-	open TEXT,">$outdir/$locus.gene.text.txt"; # gene name text
-
 	for my $feature ($seq_obj->top_SeqFeatures){
 		my ($db_xref,$val,$location);
 
@@ -198,105 +248,131 @@ while (my $seq_obj=$in->next_seq()) {
 			my $direction;
 			if ($strand == 1) {
 				$direction = '+';
-				print FEA "mt1\t$start\t$start\tfill_color=black,r0=0.955r,r1=1r\n";
-				print FEA "mt1\t$end\t$end\tfill_color=black,r0=0.955r,r1=1r\n";
-				print FEA "mt1\t$start\t$end\tfill_color=$conf{'cds'},r0=0.955r,r1=1r\n";
+				print FEA "$mt\t$start\t$start\tfill_color=black,r0=0.965r,r1=1r\n";
+				print FEA "$mt\t$end\t$end\tfill_color=black,r0=0.965r,r1=1r\n";
+				print FEA "$mt\t$start\t$end\tfill_color=$conf{'cds'},r0=0.965r,r1=1r\n";
 			}elsif ($strand == -1){
 				$direction = '-';
-				print FEA "mt1\t$start\t$start\tfill_color=black,r0=1r,r1=1.045r\n";
-				print FEA "mt1\t$end\t$end\tfill_color=black,r0=1r,r1=1.045r\n";
-				print FEA "mt1\t$start\t$end\tfill_color=$conf{'cds'},r0=1r,r1=1.045r\n";
+				print FEA "$mt\t$start\t$start\tfill_color=black,r0=1r,r1=1.035r\n";
+				print FEA "$mt\t$end\t$end\tfill_color=black,r0=1r,r1=1.035r\n";
+				print FEA "$mt\t$start\t$end\tfill_color=$conf{'cds'},r0=1r,r1=1.035r\n";
 			}else {
 				$direction = '?';
-				print FEA "mt1\t$start\t$start\tfill_color=black,r0=0.98r,r1=1.020r\n";
-				print FEA "mt1\t$end\t$end\tfill_color=black,r0=0.98r,r1=1.020r\n";
-				print FEA "mt1\t$start\t$end\tfill_color=$conf{'cds'},r0=0.98r,r1=1.020r\n";
+				print FEA "$mt\t$start\t$start\tfill_color=black,r0=0.9825r,r1=1.0175r\n";
+				print FEA "$mt\t$end\t$end\tfill_color=black,r0=0.9825r,r1=1.0175r\n";
+				print FEA "$mt\t$start\t$end\tfill_color=$conf{'cds'},r0=0.9825r,r1=1.0175r\n";
 
 			}
-			#print CDS "mt1\t$start\t$end\n";
+			#print CDS "$mt\t$start\t$end\n";
 
 			if ($feature->has_tag('gene')) {
 				for $val ($feature->get_tag_values('gene')){
 				
-					print TEXT "mt1\t$start\t$end\t$val\n";
+					print TEXT "$mt\t$start\t$end\t$val\n";
 				}
 			}else{
 			
-				print TEXT "mt1\t$start\t$end\tCDS_NA\n";
+				print TEXT "$mt\t$start\t$end\tCDS_NA\n";
 			}
 		}elsif ($feature->primary_tag eq 'rRNA' )  {
 		
 			my $start = $feature -> start;
 			my $end = $feature -> end;
+		#	print RRNA "$mt\t$start\t$end\n";
 
 			my $strand = $feature -> strand;
 			my $direction;
 			if ($strand == 1) {
 				$direction = '+';
-				print FEA "mt1\t$start\t$start\tfill_color=black,r0=0.955r,r1=1r\n";
-				print FEA "mt1\t$end\t$end\tfill_color=black,r0=0.955r,r1=1r\n";
-				print FEA "mt1\t$start\t$end\tfill_color=$conf{'rRNA'},r0=0.955r,r1=1r\n";
+				print FEA "$mt\t$start\t$start\tfill_color=black,r0=0.965r,r1=1r\n";
+				print FEA "$mt\t$end\t$end\tfill_color=black,r0=0.965r,r1=1r\n";
+				print FEA "$mt\t$start\t$end\tfill_color=$conf{'rRNA'},r0=0.965r,r1=1r\n";
 			}elsif ($strand == -1){
 				$direction = '-';
-				print FEA "mt1\t$start\t$start\tfill_color=black,r0=1r,r1=1.045r\n";
-				print FEA "mt1\t$end\t$end\tfill_color=black,r0=1r,r1=1.045r\n";
-				print FEA "mt1\t$start\t$end\tfill_color=$conf{'rRNA'},r0=1r,r1=1.045r\n";
+				print FEA "$mt\t$start\t$start\tfill_color=black,r0=1r,r1=1.035r\n";
+				print FEA "$mt\t$end\t$end\tfill_color=black,r0=1r,r1=1.035r\n";
+				print FEA "$mt\t$start\t$end\tfill_color=$conf{'rRNA'},r0=1r,r1=1.035r\n";
 			}else {
 				$direction = '?';
-				print FEA "mt1\t$start\t$start\tfill_color=black,r0=0.98r,r1=1.020r\n";
-				print FEA "mt1\t$end\t$end\tfill_color=black,r0=0.98r,r1=1.020r\n";
-				print FEA "mt1\t$start\t$end\tfill_color=$conf{'rRNA'},r0=0.98r,r1=1.020r\n";
+				print FEA "$mt\t$start\t$start\tfill_color=black,r0=0.9825r,r1=1.0175r\n";
+				print FEA "$mt\t$end\t$end\tfill_color=black,r0=0.9825r,r1=1.0175r\n";
+				print FEA "$mt\t$start\t$end\tfill_color=$conf{'rRNA'},r0=0.9825r,r1=1.0175r\n";
 			}
 			if ($feature->has_tag('gene')) {
 				for $val ($feature->get_tag_values('gene')){
-					print TEXT "mt1\t$start\t$end\t$val\n";
+					print TEXT "$mt\t$start\t$end\t$val\n";
 				}
 			}else{
 			
-				print TEXT "mt1\t$start\t$end\trRNA_NA\n";
+				print TEXT "$mt\t$start\t$end\trRNA_NA\n";
 			}
 
 		}elsif ($feature->primary_tag eq 'tRNA' )  {
 		 
 		 	my $start = $feature -> start;
 			my $end = $feature -> end;
+		#	print TRNA "$mt\t$start\t$end\n";
 
 			my $strand = $feature -> strand;
 			my $direction;
 			if ($strand == 1) {
 				$direction = '+';
-				print FEA "mt1\t$start\t$start\tfill_color=black,r0=0.955r,r1=1r\n";
-				print FEA "mt1\t$end\t$end\tfill_color=black,r0=0.955r,r1=1r\n";
-				print FEA "mt1\t$start\t$end\tfill_color=$conf{'tRNA'},r0=0.955r,r1=1r\n";
+				print FEA "$mt\t$start\t$start\tfill_color=black,r0=0.965r,r1=1r\n";
+				print FEA "$mt\t$end\t$end\tfill_color=black,r0=0.965r,r1=1r\n";
+				print FEA "$mt\t$start\t$end\tfill_color=$conf{'tRNA'},r0=0.965r,r1=1r\n";
 			}elsif ($strand == -1){
 				$direction = '-';
-				print FEA "mt1\t$start\t$start\tfill_color=black,r0=1r,r1=1.045r\n";
-				print FEA "mt1\t$end\t$end\tfill_color=black,r0=1r,r1=1.045r\n";
-				print FEA "mt1\t$start\t$end\tfill_color=$conf{'tRNA'},r0=1r,r1=1.045r\n";
+				print FEA "$mt\t$start\t$start\tfill_color=black,r0=1r,r1=1.035r\n";
+				print FEA "$mt\t$end\t$end\tfill_color=black,r0=1r,r1=1.035r\n";
+				print FEA "$mt\t$start\t$end\tfill_color=$conf{'tRNA'},r0=1r,r1=1.035r\n";
 			}else {
 				$direction = '?';
-				print FEA "mt1\t$start\t$start\tfill_color=black,r0=0.98r,r1=1.020r\n";
-				print FEA "mt1\t$end\t$end\tfill_color=black,r0=0.98r,r1=1.020r\n";
-				print FEA "mt1\t$start\t$end\tfill_color=$conf{'tRNA'},r0=0.98r,r1=1.020r\n";
+				print FEA "$mt\t$start\t$start\tfill_color=black,r0=0.9825r,r1=1.0175r\n";
+				print FEA "$mt\t$end\t$end\tfill_color=black,r0=0.9825r,r1=1.0175r\n";
+				print FEA "$mt\t$start\t$end\tfill_color=$conf{'tRNA'},r0=0.9825r,r1=1.0175r\n";
 			}
-			if ($feature->has_tag('product')) {
-				for $val ($feature->get_tag_values('product')){
-				
-					print TEXT "mt1\t$start\t$end\t$val\n";
+			if ($feature->has_tag('gene')) {
+				for $val ($feature->get_tag_values('gene')){
+					
+					print TEXT "$mt\t$start\t$end\t$val\n";
 				}
-			}else{
-				
-					print TEXT "mt1\t$start\t$end\ttRNA_NA\n";
+			}else{	
+					
+					print TEXT "$mt\t$start\t$end\ttRNA_NA\n";
 			}
 		}
 	}
-	
+}
 
+# close file handles
+
+if ($mapping_on && $conf{'fq'}) {
+	close FA;
+	close MAP;
+	print STDERR "run mapping shell\n";
+	system("sh $outdir/circos.map.sh");
+	`rm $outdir/circos.mito.fa.*`;
+	unless(-s "$outdir/circos.depth.txt"){
+		print "Something wrong with mapping process!\n";
+		exit();
+	}
+
+}
+
+if ($conf{'base'} eq 'yes') {
+	close BASE;
+}
+if ($conf{'gc'} eq 'yes') {
+	close GC;
+}
+
+close KAR;
 close FEA;
 close TEXT;
 
+
 # creat a circos.conf file
-open CON,">$outdir/$locus.circos.conf";
+open CON,">$outdir/circos.conf";
 print  CON <<_CONFIG_;
 
 <<include etc/colors_fonts_patterns.conf>>
@@ -305,7 +381,7 @@ print  CON <<_CONFIG_;
 <image>
 ###<<include etc/image.conf>>
 dir   = $conf{'outdir'}
-file  = $locus.png
+file  = circos.png
 png   = $conf{'png'}
 svg   = $conf{'svg'}
 
@@ -326,7 +402,7 @@ background = $conf{'background'}
 
 <spacing>
 default = 0.01r
-break   = $breaks{$locus}
+break   = $break
 </spacing>
 
 ###<<include ideogram.position.conf>>
@@ -340,11 +416,11 @@ stroke_color     = black
 ###<<include ideogram.label.conf>>
 show_label       = yes
 label_font       = bolditalic
-#label_radius     = dims(image,radius)
-label_radius     = 0.2r
-label_size       = 60
+label_radius     = dims(ideogram,radius_outer) - 0.1r
+#label_radius     = 0.2r
+label_size       = 28
 label_parallel   = yes
-label_case       = upper
+label_case       = lower
 #label_format     = eval(sprintf("chr%s",var(label)))
 #label_format     = eval(var(labe))
 
@@ -404,11 +480,11 @@ suffix         = " kb"
 </ticks>
 #-----------------karyotype------------------
 
-karyotype   = $locus.karyotype.txt
+karyotype   = circos.karyotype.txt
 
 chromosomes_units = 1000
-chromosomes       = mt1
-chromosomes_display_default = no
+#chromosomes       = mt1
+chromosomes_display_default = yes
 
 #-----------------plots------------------
 
@@ -421,7 +497,7 @@ type       = text
 color      = $conf{'label_color'}
 label_font = default
 label_size = 28p
-file = $locus.gene.text.txt
+file = circos.gene.text.txt
 r1   = 1r+300p
 r0   = 1r+10p
 show_links     = yes
@@ -442,7 +518,7 @@ type       = text
 color      = $conf{'label_color'}
 label_font = bold
 label_size = 40p
-file = $locus.strand.text.txt
+file = circos.strand.text.txt
 show_links     = no
 
 </plot>
@@ -456,7 +532,7 @@ if ($conf{'gc'} eq 'yes') {
 ###############GC content
 <plot>
 type      = histogram
-file      = $locus.fa.gc.txt
+file      = circos.fa.gc.txt
 
 r1        = 0.615r
 r0        = 0.45r
@@ -468,6 +544,16 @@ thickness   = 2
 color       = $conf{'gc_fill'}
 extend_bin  = no
 fill_color = $conf{'gc_fill'}
+<backgrounds>
+#<background>
+#y1    = -0.1
+#color = lred
+#</background>
+#<background>
+#y0    = 0
+#color = lgreen
+#</background>
+</backgrounds>
 
 <axes>
 
@@ -489,13 +575,9 @@ thickness = 2
 use = no
 <rule>
 condition  = var(value) >0.50
-fill_color = yellow
+fill_color = dyellow
 </rule>
 
-#<rule>
-#condition  = var(value) < 0.25
-#fill_color = green
-#</rule>
 </rules>
 
 </plot>
@@ -511,7 +593,7 @@ if ($conf{'base'} eq 'yes') {
 <plot>
 type       = text
 label_font = mono
-file       = $locus.base.txt
+file       = circos.base.txt
 r1         = 0.91r
 r0         = 0.88r
 label_size = 20
@@ -537,10 +619,26 @@ color     = green
 _CONFIG_
 }
 
-if ($conf{'depth'} eq 'yes') {
+my $generated_depth = '';
+if ($conf{'depth_file'} and $conf{'depth'} eq 'yes'){
+	print "WARNNING: you set both depth_file and depth = yes, so I will just use existed depth file\n";
+	$generated_depth = $conf{'depth_file'};
+
+}elsif ($conf{'depth_file'}) {
+
+	$generated_depth = $conf{'depth_file'};
+
+}else{
+
+	if ($conf{'depth'} eq 'yes') {
+		$generated_depth = "$outdir/circos.depth.txt";
+	}
+}
+
+if ($generated_depth) {
 
 	# caculate upper quartile value
-	my $str = `grep -v "^#" $locus.depth.txt|awk '{print \$4}'`;
+	my $str = `grep -v "^#" $generated_depth|awk '{print \$4}'`;
 	chomp $str;
 	my @tmp = split /\n/,$str;
 	my $stat = Statistics::Descriptive::Full->new();
@@ -555,13 +653,13 @@ if ($conf{'depth'} eq 'yes') {
 type      = line
 thickness = 2
 max_gap = 1u
-file    = $locus.depth.txt
+file    = $generated_depth
 color   = dgreen
 min     = 0
 max     = $max_depth
 r0      = 0.618r
 r1      = 0.768r
-fill_color = $conf{'depth_fill'}_a2
+fill_color = $conf{'depth_fill'}
 
 
 <axes>
@@ -587,12 +685,12 @@ fill_color   = dred_a1
 </rule>
 
 </rules>
-
 </plot>
 
 _CONFIG_
 
 }
+
 
 print CON "</plots>\n";
 
@@ -603,7 +701,7 @@ print CON <<_CONFIG_;
 
 # CDS & rRNA & tRNA
 <highlight>
-file         = $locus.features.txt
+file         = circos.features.txt
 </highlight>
 
 </highlights>
@@ -615,6 +713,5 @@ _CONFIG_
 close CON;
 
 
-`$conf{'circos_path'} -conf $outdir/$locus.circos.conf`;
+`$conf{'circos_path'} -conf $outdir/circos.conf`;
 
-}
