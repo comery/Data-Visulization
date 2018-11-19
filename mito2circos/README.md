@@ -56,9 +56,7 @@ perl draw_circos_for_mitogenome_auto_depth.pl -gb ../example.gb -conf mitogenome
 
 ```
 # where circos you install
-circos_path		=	/usr/local/bin/circos
-bwa             =   /usr/local/bin/bwa
-samtools        =   /usr/local/bin/samtools
+circos_path		=	circos
 #color
 cds				=	102,194,165
 rRNA			=	252,141,98
@@ -68,9 +66,16 @@ gc				=	yes
 win				=	50
 gc_fill			=	146,197,222
 # whether draw depth abundance circle
+bwa             =   bwa
+samtools        =   samtools
+depth_file      =
 depth			=	yes
 depth_fill		= 	5,113,176
-fq				=	../data/test1.fq,../data/test2.fq
+fq				=	data/test1.fq.gz,data/test2.fq.gz
+# threads for baw
+threads         =   2
+# optional arguments for samtools
+opts_samtools   =  -a -a
 
 # whether draw base around circle
 base 			=	no
@@ -79,17 +84,17 @@ locus_color		=	black
 # gene name label color
 label_color		=	black
 # image
-outdir			=	./outdir
+outdir			=	./example
 png				=	yes
 svg				=	yes
 # color or file
 background		=	white
 #background		=	./background.png
 ```
-now, you can enjoy it.
+now, you can run it by:
 
-```
-perl draw_circos_for_mitogenome_standard.pl -gb ../example.gb -conf mitogenome.standard.conf
+```shell
+perl draw_circos_for_mitogenome_auto_depth.pl -gb data/SRR611174_mitoscaf.fa.gbf -conf mitogenome.auto_depth.conf
 
 ```
 
