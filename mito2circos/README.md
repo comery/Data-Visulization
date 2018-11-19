@@ -69,7 +69,7 @@ gc_fill			=	146,197,222
 bwa             =   bwa
 samtools        =   samtools
 depth_file      =
-depth			=	yes
+run_map			=	yes
 depth_fill		= 	5,113,176
 fq				=	data/test1.fq.gz,data/test2.fq.gz
 # threads for baw
