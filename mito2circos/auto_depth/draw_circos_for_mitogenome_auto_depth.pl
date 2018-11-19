@@ -28,7 +28,7 @@ use Statistics::Descriptive;
 =head1 Attention
 	~ If you want to draw depth part, you need set in two ways:
 	1. set "depth_file = xxx" ;
-	2. set "depth = yes" and "fq = /yourpath/..."; 
+	2. set "run_map = yes" and "fq = /yourpath/..."; 
 	if set 1,2 in the same time, program will use 1.
 
 =cut
@@ -85,7 +85,7 @@ die "circos path is bad !" if ( ! $conf{'circos_path'} ) ;
 
 $conf{'win'} = 50 if (! $conf{'win'}); # slipping windows size for GC content, default=50 bp
 $conf{'gc'} = 'yes' if (! $conf{'gc'});
-$conf{'depth'} = 'yes' if (! $conf{'depth'});
+$conf{'run_map'} = 'yes' if (! $conf{'run_map'});
 $conf{'base'} = 'no' if (! $conf{'base'});
 $conf{'threads'} ||= 2;
 
@@ -96,48 +96,40 @@ if ($conf{'opts_samtools'}){
 
 }
 
-
-if ($conf{'depth'} eq 'yes'){
-	die "bwa path is bad!" if ( ! $conf{'bwa'} ) ;
-	die "samtools path is bad!" if ( ! $conf{'samtools'} ) ;
-}
-
-if ($conf{'depth'} eq 'yes' && !$conf{'fq'}) {
-	die "Fastq file is necessary in configures when you set \"depth = yes\"" ;
-}
-
 # calculate depth
-	my $bwa = $conf{'bwa'} ;
-	my $samtools = $conf{'samtools'};
+my $bwa = $conf{'bwa'} ;
+my $samtools = $conf{'samtools'};
+# turn on mapping function
+my $mapping_on = 0;
+if ($conf{'depth_file'} and $conf{'run_map'} eq 'yes'){
+	
+	print "WARNNING: you set both depth_file and run_map = yes, so I will just use existed depth file\n";
 
-	my $mapping_on = 0;
-	if ($conf{'depth_file'} and $conf{'depth'} eq 'yes'){
-		print "WARNNING: you set both depth_file and depth = yes, so I will just use existed depth file\n";
+}elsif ($conf{'run_map'} eq 'yes') {
+		
+	$mapping_on = 1;
+	die "bwa path is bad!" if ( ! $bwa ) ;
+	die "samtools path is bad!" if ( ! $samtools ) ;
+	if( ! $conf{'fq'}) {
+		die "Fastq file is necessary in configures when you set \"run_map = yes\"" ;
+	}else{
+		open FA,">$outdir/circos.mito.fa";
+		open MAP, ">$outdir/circos.map.sh";
+		my @fq = split /,/,$conf{'fq'} ;
+		die "fastq_1 is bad file!" unless (-e $fq[0]) ;
+		die "fastq_2 is bad file!" unless (-e $fq[1]) ;
+		my $fq1 = abs_path($fq[0]);
+		my $fq2 = abs_path($fq[1]);
 
-	}elsif ($conf{'depth_file'}) {
-
-		$mapping_on = 0; # still 0
-
-	}elsif ($conf{'depth'} eq 'yes') {
-			
-			$mapping_on = 1;
+		print MAP "$bwa index $outdir/circos.mito.fa \n";
+		print MAP "$bwa mem -t $conf{'threads'} $outdir/circos.mito.fa $fq1  $fq2 |samtools view -bS -q 30 -h -o $outdir/circos.bam\n";
+		print MAP "$samtools sort $outdir/circos.bam -o $outdir/circos.sorted.bam\n";
+		print MAP "$samtools depth $opts_samtools $outdir/circos.sorted.bam > $outdir/circos.dep\n";
+		print MAP "awk \'{print \$1\,\$2,\$2,\$3}\' $outdir/circos.dep > $outdir/circos.depth.txt\n";
 	}
-if ($mapping_on && $conf{'fq'}) {
-	open FA,">$outdir/circos.mito.fa";
-	open MAP, ">$outdir/circos.map.sh";
-	my @fq = split /,/,$conf{'fq'} ;
-	die "fastq_1 is bad file!" unless (-e $fq[0]) ;
-	die "fastq_2 is bad file!" unless (-e $fq[1]) ;
-	my $fq1 = abs_path($fq[0]);
-	my $fq2 = abs_path($fq[1]);
-
-	print MAP "$bwa index $outdir/circos.mito.fa \n";
-	print MAP "$bwa mem -t $conf{'threads'} $outdir/circos.mito.fa $fq1  $fq2 |samtools view -bS -q 30 -h -o $outdir/circos.bam\n";
-	print MAP "$samtools sort $outdir/circos.bam -o $outdir/circos.sorted.bam\n";
-	print MAP "$samtools depth $opts_samtools $outdir/circos.sorted.bam > $outdir/circos.dep\n";
-	print MAP "awk \'{print \$1\,\$2,\$2,\$3}\' $outdir/circos.dep > $outdir/circos.depth.txt\n";
 
 }
+
 
 if ($conf{'base'} eq 'yes') {
 	open BASE,">$outdir/circos.base.txt";
@@ -182,17 +174,6 @@ my $in = Bio::SeqIO-> new(-file => "$gbfile", "-format" => 'genbank');
 my $id = 0;
 my ($chr,$mt);
 
-#my %hash;
-#while (my $object=$in->next_seq()) {
-	
-#	my $sequence_len = $object->length;
-#	$hash{\$object} = $sequence_len;
-#}
-
-#my @sorted = sort{length($hash{$b}) <=> length($hash{$a}) or $a cmp $b} keys %hash;
-
-#foreach my $k(@sorted){
-#	print "$k\n";
 while (my $seq_obj=$in->next_seq()) {
 
 	my $source = $seq_obj->seq;
@@ -205,12 +186,7 @@ while (my $seq_obj=$in->next_seq()) {
 	#print KAR "$chr - $mt\t$locus-$topology{$locus}\t0\t$sou_len\tgrey\n";
 	print KAR "$chr - $mt\t$locus\t0\t$sou_len\tgrey\n";
 	
-	if ($mapping_on && $conf{'fq'}) {
-		
-		print FA ">$mt\n$source\n";
-
-	}
-
+	print FA ">$mt\n$source\n" if ($mapping_on) ;
 
 	if ($conf{'base'} eq 'yes') {
 		my @base = split//,$source;
@@ -620,19 +596,13 @@ _CONFIG_
 }
 
 my $generated_depth = '';
-if ($conf{'depth_file'} and $conf{'depth'} eq 'yes'){
-	print "WARNNING: you set both depth_file and depth = yes, so I will just use existed depth file\n";
+if ($conf{'depth_file'} ){
+	#print "WARNNING: you set both depth_file and run_map = yes, so I will just use existed depth file\n";
 	$generated_depth = $conf{'depth_file'};
 
-}elsif ($conf{'depth_file'}) {
-
-	$generated_depth = $conf{'depth_file'};
-
-}else{
-
-	if ($conf{'depth'} eq 'yes') {
+}elsif ($conf{'run_map'} eq 'yes') {
 		$generated_depth = "$outdir/circos.depth.txt";
-	}
+
 }
 
 if ($generated_depth) {
@@ -691,7 +661,6 @@ _CONFIG_
 
 }
 
-
 print CON "</plots>\n";
 
 print CON <<_CONFIG_;
@@ -714,4 +683,7 @@ close CON;
 
 
 `$conf{'circos_path'} -conf $outdir/circos.conf`;
+print "All done!\n";
+print "PNG => $outdir/circos.png\n";
+print "SVG => $outdir/circos.svg\n";
 
