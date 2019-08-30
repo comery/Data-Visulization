@@ -146,7 +146,7 @@ my $locus_line = `grep 'LOCUS' $gbfile `;
 chomp $locus_line;
 my @lines = split /\n/,$locus_line;
 my $submitos = @lines;
-print "WARNNING: $submitos sequences will be presented on circos figure.\n";
+print "[INFO]: $submitos sequences will be presented on circos figure.\n";
 
 # open file handles
 open KAR,">$outdir/circos.karyotype.txt";

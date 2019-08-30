@@ -7,12 +7,12 @@ import string
 parser = argparse.ArgumentParser(
 	description = "Draw circos figure to illustrat mapping result")
 
-parser.add_argument('-fa', metavar = 'FILE', type = str, required = True,
-                    dest = 'ref', help = "reference fasta")
-parser.add_argument('-map', metavar = 'FILE', type = str, required = True,
-		    help = "mapping result, depth of each site")
-parser.add_argument('-conf', metavar = 'FILE', type = str, required = True,
-		    help = "general configures to circos parameters")
+parser.add_argument('-fa', metavar='FILE', type=str, required=True,
+                    dest='ref', help="reference fasta")
+parser.add_argument('-map', metavar = 'FILE', type = str, required=True,
+                    help="mapping result, depth of each site")
+parser.add_argument('-conf', metavar='FILE', type=str, required=True,
+                    help="general configures to circos parameters")
 
 args = parser.parse_args()
 

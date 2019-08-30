@@ -1,4 +1,1 @@
-chr1 - mt1	scaffold2381	0	1090	grey
-chr2 - mt2	scaffold2428	0	2164	grey
-chr3 - mt3	scaffold2550	0	2584	grey
-chr4 - mt4	C42857	0	1724	grey
+chr1 - mt1	scaffold1560	0	15314	grey

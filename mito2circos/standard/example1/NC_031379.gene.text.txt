@@ -1,0 +1,2 @@
+mt1	1412	2960	COX1
+mt1	1490	2198	barcode_region
