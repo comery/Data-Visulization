@@ -19,7 +19,15 @@
 python3 ../bin/preCircosLink.py --link test.link --scaf_len all.lens
 circos -conf circos.conf
 ```
-2. 如果你的reference是已经组装到染色体级别，这时候你可以选择将每个染色体单独拿出来画一张图，这样比较清晰的看到每个染色体的情况，![Fig 2](example/linkbyChrs/PEQU01000001.1/single_chr.png)
+
+2. 先按照长度降序排列画reference的染色体（scaffold）然后按照ref和target的关联关系降序排列target的scaffold，这样可以是连线更加美观，![Fig 2](example/pair_chrs.sort.png)
+
+```shell
+python3 ../bin/preCircosLink.sort.py --link test.link --scaf_len all.lens --minL 1000000 --minB 10000 --rate 0.1
+circos -conf circos.conf
+```
+
+3. 如果你的reference是已经组装到染色体级别，这时候你可以选择将每个染色体单独拿出来画一张图，这样比较清晰的看到每个染色体的情况，![Fig 3](example/linkbyChrs/PEQU01000001.1/single_chr.png)
 
 ```shell
 python3 ../bin/split_blocks_by_Chrs.py test.link
@@ -32,7 +40,7 @@ cd linkbyChrs/PEQU01000001.1
 python3 ../../../bin/preCircosLink.py --link PEQU01000001.1.txt --scaf_len ../../all.lens
 circos -conf ../../circos.conf
 ```
-3. 如果两个基因组都是scaffold级别，想要看整体的比对情况，这时候可以不考虑单个scaffold的情况，所以可以将两个染色体分别连城两个假染色体，但这个可能需要进行适当的过滤才能看清block的关系，不然所以线条都会铺满整个图片。![Fig 3](example/artificial_chrs.png)
+4. 如果两个基因组都是scaffold级别，想要看整体的比对情况，这时候可以不考虑单个scaffold的情况，所以可以将两个染色体分别连城两个假染色体，但这个可能需要进行适当的过滤才能看清block的关系，不然所以线条都会铺满整个图片。![Fig 3](example/artificial_chrs.png)
 
 ```shell```
 python3 ../bin/artificial_chrs_for_synteny.py querry.lens ref.lens test.link 10000000 10000
