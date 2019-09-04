@@ -19,7 +19,7 @@
 python3 ../bin/preCircosLink.py --link test.link --scaf_len all.lens
 circos -conf circos.conf
 ```
-2. 如果你的reference是已经组装到染色体级别，这时候你可以选择将每个染色体单独拿出来画一张图，这样比较清晰的看到每个染色体的情况，![Fig 2](example/single_chr.png)
+2. 如果你的reference是已经组装到染色体级别，这时候你可以选择将每个染色体单独拿出来画一张图，这样比较清晰的看到每个染色体的情况，![Fig 2](example/linkbyChrs/PEQU01000001.1/single_chr.png)
 
 ```shell
 python3 ../bin/split_blocks_by_Chrs.py test.link
