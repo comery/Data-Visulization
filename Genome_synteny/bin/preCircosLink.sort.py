@@ -58,7 +58,6 @@ def Add_records(dict, k, v):
     else:
         dict[k] = [v,]
 
-
 def main(args):
     records = []
     lens = getLen(args.scaf_len)
@@ -67,34 +66,34 @@ def main(args):
     with open(args.link, 'r') as fh:
         for b in fh:
             tmp = b.strip().split()
-            #
             records.append(tmp)
 
     # filter link record with short length
     scaf_block = {}
 
-    good_scaf = []
+    good_rate_scaf = []
     filtered_records = []
     # filter by scaffold and block length
     for r in records:
         (querry_scaf, q_start, q_end, ref_scaf, r_start, r_end) = r
-        if lens[querry_scaf] >= args.minL and lens[ref_scaf] >= args.minL:
-            block_len = int(q_end) - int(q_start) + 1
-            if querry_scaf in scaf_block.keys():
-                scaf_block[querry_scaf] += block_len
-            else:
-                scaf_block[querry_scaf] = block_len
+        block_len = int(q_end) - int(q_start) + 1
+        if querry_scaf in scaf_block.keys():
+            scaf_block[querry_scaf] += block_len
+        else:
+            scaf_block[querry_scaf] = block_len
     # filter scaffold by block ratio
     for k in scaf_block.keys():
         if scaf_block[k] >= lens[k] * args.rate:
-            good_scaf.append(k)
+            good_rate_scaf.append(k)
     # filter records by block length
 
     synteny = {}
     for item in records:
-        if item[0] not in good_scaf:
-            continue
         block_len = int(item[2]) - int(item[1]) + 1
+        if item[0] not in good_rate_scaf:
+            continue
+        if lens[item[0]] < args.minL or lens[item[3]] < args.minL:
+            continue
         if block_len < args.minB:
             continue
         Add_records(synteny, item[3], item)
@@ -111,7 +110,7 @@ def main(args):
     all_kary = kary_ref + kary_que
     if len(all_kary) > 150:
         print(
-                "Sorry, It just can handle more than 150 chrs because " +\
+                "Sorry, It just can handle less than 150 chrs because " +\
                 "too many chrs will make a mass!, however, you can change" +\
                 "this code for suit\n"
                 )
@@ -130,7 +129,7 @@ def main(args):
                 lk.write("hs{} {} {} hs{} {} {}\n".format(order_kary[link[0]], link[1], link[2], order_kary[i], link[4], link[5]))
 
 if __name__ == '__main__':
-    description = """
+    des = """
 
     deal synteny block file and generate color profile for circos,
     imput file should be six-column table, querry_scaf, q_start,
@@ -139,19 +138,20 @@ if __name__ == '__main__':
 
     yangchentao at genomics.cn, BGI.
     """
-    parser = argparse.ArgumentParser(description="Create Krona plots from basta output files",
+    parser = argparse.ArgumentParser(description=des,
                                     formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument("--link", type=str, required=True,
+    parser.add_argument("--link", type=str, required=True, metavar='<STR>',
                         help="BASTA annotation file(s) separated by comma")
-    parser.add_argument("--scaf_len", type=str, required=True,
+    parser.add_argument("--scaf_len", type=str, required=True, metavar='<STR>',
                         help="all scaffold length, including querry and ref")
-    parser.add_argument("--minL", type=int, required=False,
+    parser.add_argument("--minL", type=int, required=False, metavar='<INT>',
                         help="min scaffold lenth in link record, default=1000000",
                         default=1000000)
-    parser.add_argument("--minB", type=int, required=False,
+    parser.add_argument("--minB", type=int, required=False, metavar='<iNT>',
                         help="min block length of synteny, default=100000",
-                       default=100000)
+                       default=10000)
     parser.add_argument("--rate", type=float, required=False,
+                        metavar='<FLOAT>',
                         help="remove these scafoold which synteny block is shorter than scaf_len * rate",
                        default=0.5)
     args =  parser.parse_args()
