@@ -28,13 +28,12 @@ def main():
             rb = int(tmp[5]) - int(tmp[4]) + 1
             querry_block += qb
             ref_block += rb
-    print("target genome total length: {}".format(querry_total))
-    print("target genome block length: {}".format(querry_block))
-    print("target genome synteny block ratio: {:.3f}".format(querry_block/querry_total))
-    print("reference genome total length: {}".format(ref_total))
-    print("reference genome block length: {}".format(ref_block))
-    print("reference genome synteny block ratio: {:.3f}".format(ref_block/ref_total))
-
+    print("target genome total length:\t{}".format(querry_total))
+    print("target genome syntenic block length:\t{}".format(querry_block))
+    print("target genome syntenic block ratio:\t{:.3f}".format(querry_block/querry_total))
+    print("reference genome total length:\t{}".format(ref_total))
+    print("reference genome syntenic block length:\t{}".format(ref_block))
+    print("reference genome syntenic block ratio:\t{:.3f}".format(ref_block/ref_total))
 
 
 if __name__ == '__main__':

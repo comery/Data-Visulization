@@ -4,14 +4,14 @@
 
 ### 分析方法
 
-共线性的关系其实主要还是靠系列的相似性得来的，所以核心思想还是比对，目前可以使用的软件很多，这里不再赘述他们的具体使用。一般用到数据是两个基因组的蛋白序列，或者全基因组的组装结果，针对这两种不同的数据，一般用到的方法比对方法是blastp和lastz，最后比对结果经过进一步的处理之后得到一个table表，每一行表示一个共线性的block块。
+共线性的关系其实主要还是靠序列的相似性反映，所以核心思想还是比对，目前可以使用的软件很多，这里不再赘述他们的具体使用。一般用到数据是两个基因组的蛋白序列，或者全基因组的组装结果，针对这两种不同的数据，一般用到的方法比对方法是blastp和lastz，最后比对结果经过进一步的处理之后得到一个table表，每一行表示一个共线性的block块。
 
 
 ### 可视化策略
 
 前面只是大概提了一下共线性的思想和分析方法，下面主要介绍一下如何将这些比对结果展示出来，这里都是我个人总结和实现的方法，是应用到平常项目当中的，最主要的特点是自动化配色和生成circos画图所需要的配置文件。但是真正发表文章还需要自己根据实际情况合理的选择，并调整画图的参数。
 
->Note: 以下的分析中参考序列不论有没有组装到染色体级别都可以相应的代码，只有文件按照要去就可以。另外一下每个脚本都会生成一个```karyotype.txt```和```link.txt```的文件，circos.conf文件中已经指定了输入文件是这两个文件，所以可以直接使用该配置文件画图
+>Note: 以下的分析中参考序列不论有没有组装到染色体级别都可以使用相应的代码，只要按照要求输入正确的文件就可以了。另外，每个脚本最终都会生成一个```karyotype.txt```和```link.txt```的文件，karyotyoe.txt包含了核型文件，即画哪些scaffold（chr）以及顺序和颜色，link.txt 包含了需要画的block对应关系，一行数据将会画出一条线。circos.conf文件中已经指定了输入文件是这两个文件，所以可以直接使用该配置文件画图
 
 1. target基因组和reference基因组one by one的画在一张图中，可以想象一个block的比对记录，有target和ref两条序列，这俩个会挨着画在一起，![Fig 1](example/pair_chrs.png)
 
@@ -20,7 +20,7 @@ python3 ../bin/preCircosLink.py --link test.link --scaf_len all.lens
 circos -conf circos.conf
 ```
 
-2. 先按照长度降序排列画reference的染色体（scaffold）然后按照ref和target的关联关系降序排列target的scaffold，这样可以是连线更加美观，![Fig 2](example/pair_chrs.sort.png)
+2. 先按照长度降序排列画reference的染色体（scaffold）然后按照ref和target的关联关系降序排列target的scaffold，这样可以将染色体比较对称的画出来，使连线更加美观，![Fig 2](example/pair_chrs.sort.png)
 
 ```shell
 python3 ../bin/preCircosLink.sort.py --link test.link --scaf_len all.lens --minL 1000000 --minB 10000 --rate 0.1
@@ -40,7 +40,7 @@ cd linkbyChrs/PEQU01000001.1
 python3 ../../../bin/preCircosLink.py --link PEQU01000001.1.txt --scaf_len ../../all.lens
 circos -conf ../../circos.conf
 ```
-4. 如果两个基因组都是scaffold级别，想要看整体的比对情况，这时候可以不考虑单个scaffold的情况，所以可以将两个染色体分别连城两个假染色体，但这个可能需要进行适当的过滤才能看清block的关系，不然所以线条都会铺满整个图片。![Fig 3](example/artificial_chrs.png)
+4. 如果两个基因组都是scaffold级别，想要看整体的比对情况，这时候可以不考虑单个scaffold的情况，所以可以将两个染色体分别连城两个假染色体，但这个时候可能需要进行适当的过滤才能看清block的关系，不然所以线条都会铺满整个图片。![Fig 3](example/artificial_chrs.png)
 
 ```shell```
 python3 ../bin/artificial_chrs_for_synteny.py querry.lens ref.lens test.link 10000000 10000
