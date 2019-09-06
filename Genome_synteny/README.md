@@ -37,7 +37,7 @@ e.g.
 
 ```shell
 cd linkbyChrs/PEQU01000001.1
-python3 ../../../bin/preCircosLink.py --link PEQU01000001.1.txt --scaf_len ../../all.lens
+python3 ../../../bin/preCircosLink.sort.py --link PEQU01000001.1.txt --scaf_len ../../all.lens
 circos -conf ../../circos.conf
 ```
 4. 如果两个基因组都是scaffold级别，想要看整体的比对情况，这时候可以不考虑单个scaffold的情况，所以可以将两个染色体分别连城两个假染色体，但这个时候可能需要进行适当的过滤才能看清block的关系，不然所以线条都会铺满整个图片。![Fig 3](example/artificial_chrs.png)
