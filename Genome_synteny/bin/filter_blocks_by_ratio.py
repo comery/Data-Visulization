@@ -15,9 +15,9 @@ except ImportError:
     print("We need palettable, sorry...\ninstall: pip install palettable")
     sys.exit(1)
 
-scafcut = 10000
-blockcut = 1000
-rate = 0.5
+scafcut = 1000
+blockcut = 500
+rate = 0
 
 if len(sys.argv) < 4:
     print("Usage: python3 {} <scaf.lens> <block.record.txt> <filtered.link.txt>".format(sys.argv[0]))

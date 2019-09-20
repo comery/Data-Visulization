@@ -146,13 +146,13 @@ if __name__ == '__main__':
                         help="all scaffold length, including querry and ref")
     parser.add_argument("--minL", type=int, required=False, metavar='<INT>',
                         help="min scaffold lenth in link record, default=1000000",
-                        default=1000000)
+                        default=1000)
     parser.add_argument("--minB", type=int, required=False, metavar='<iNT>',
                         help="min block length of synteny, default=100000",
-                       default=10000)
+                       default=500)
     parser.add_argument("--rate", type=float, required=False,
                         metavar='<FLOAT>',
                         help="remove these scafoold which synteny block is shorter than scaf_len * rate",
-                       default=0.5)
+                       default=0)
     args =  parser.parse_args()
     main(args)
