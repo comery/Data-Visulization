@@ -239,7 +239,6 @@ while (my $seq_obj=$in->next_seq()) {
 				print FEA "$mt\t$start\t$end\tfill_color=$conf{'cds'},r0=0.9825r,r1=1.0175r\n";
 
 			}
-			#print CDS "$mt\t$start\t$end\n";
 
 			if ($feature->has_tag('gene')) {
 				for $val ($feature->get_tag_values('gene')){
@@ -250,11 +249,11 @@ while (my $seq_obj=$in->next_seq()) {
 			
 				print TEXT "$mt\t$start\t$end\tCDS_NA\n";
 			}
+		
 		}elsif ($feature->primary_tag eq 'rRNA' )  {
 		
 			my $start = $feature -> start;
 			my $end = $feature -> end;
-		#	print RRNA "$mt\t$start\t$end\n";
 
 			my $strand = $feature -> strand;
 			my $direction;
@@ -287,7 +286,6 @@ while (my $seq_obj=$in->next_seq()) {
 		 
 		 	my $start = $feature -> start;
 			my $end = $feature -> end;
-		#	print TRNA "$mt\t$start\t$end\n";
 
 			my $strand = $feature -> strand;
 			my $direction;
@@ -312,10 +310,39 @@ while (my $seq_obj=$in->next_seq()) {
 					
 					print TEXT "$mt\t$start\t$end\t$val\n";
 				}
-			}else{	
-					
-					print TEXT "$mt\t$start\t$end\ttRNA_NA\n";
+			
 			}
+		}elsif ($feature->primary_tag eq 'D-loop' )  {
+		
+			my $start = $feature -> start;
+			my $end = $feature -> end;
+
+			my $strand = $feature -> strand;
+			my $direction;
+			if ($strand == 1) {
+				$direction = '+';
+				print FEA "$mt\t$start\t$start\tfill_color=black,r0=0.965r,r1=1r\n";
+				print FEA "$mt\t$end\t$end\tfill_color=black,r0=0.965r,r1=1r\n";
+				print FEA "$mt\t$start\t$end\tfill_color=$conf{'D-loop'},r0=0.965r,r1=1r\n";
+			}elsif ($strand == -1){
+				$direction = '-';
+				print FEA "$mt\t$start\t$start\tfill_color=black,r0=1r,r1=1.035r\n";
+				print FEA "$mt\t$end\t$end\tfill_color=black,r0=1r,r1=1.035r\n";
+				print FEA "$mt\t$start\t$end\tfill_color=$conf{'D-loop'},r0=1r,r1=1.035r\n";
+			}else {
+				$direction = '?';
+				print FEA "$mt\t$start\t$start\tfill_color=black,r0=0.9825r,r1=1.0175r\n";
+				print FEA "$mt\t$end\t$end\tfill_color=black,r0=0.9825r,r1=1.0175r\n";
+				print FEA "$mt\t$start\t$end\tfill_color=$conf{'D-loop'},r0=0.9825r,r1=1.0175r\n";
+			}
+
+			print TEXT "$mt\t$start\t$end\tD-loop\n";
+	
+
+		}else{
+			# do nothing, debug
+			1;
+
 		}
 	}
 }

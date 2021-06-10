@@ -56,6 +56,7 @@ def give_color(n):
 
 def rgb2hex(tuble):
     r, g, b = int(tuble[0]), int(tuble[1]), int(tuble[2])
+    print("{},{},{}".format(r,g,b))
     return '#{:02x}{:02x}{:02x}'.format(r, g, b)
 
 if __name__ == '__main__':

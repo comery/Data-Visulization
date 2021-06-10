@@ -1,3 +1,4 @@
+mt1	69	305	D-loop
 mt1	9	73	trnF(gaa)
 mt1	79	1824	ND5
 mt1	1825	1891	trnH(gug)

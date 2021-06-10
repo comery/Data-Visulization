@@ -1,3 +1,6 @@
+mt1	69	69	fill_color=black,r0=0.965r,r1=1r
+mt1	305	305	fill_color=black,r0=0.965r,r1=1r
+mt1	69	305	fill_color=67,162,202,r0=0.965r,r1=1r
 mt1	9	9	fill_color=black,r0=1r,r1=1.035r
 mt1	73	73	fill_color=black,r0=1r,r1=1.035r
 mt1	9	73	fill_color=251,128,114,r0=1r,r1=1.035r
