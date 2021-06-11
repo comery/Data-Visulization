@@ -1,8 +1,9 @@
 ## **THIS DIRECTORY HAS BEEN MOVED TO => comery/Data-Visulization**  
 this copy will be forzen!
 
-![example](http://ogj9k5cjf.bkt.clouddn.com/NC_031379.png)
+![example](mito2circos/auto_depth/example/circos.png)
 example: Fruhstorferiola huayinensis mitochondrion, complete genome, download from NCBI. NC_031379
+
 #### Summary
 circos is very powerful software to illustrate genetic information, especially for mitochondrion and chloroplast genomes. Here I provide a useful perl script to convert genome annotation with genebank format to all features as circos input, and then draw a circos image.
 
@@ -25,6 +26,7 @@ circos_path		=	/usr/local/bin/circos
 cds				=   102,194,165
 rRNA			=	252,141,98
 tRNA			=	123,50,148
+D-loop        =   67,162,202
 # whether draw GC content circle
 gc				=	yes
 win				=	50
