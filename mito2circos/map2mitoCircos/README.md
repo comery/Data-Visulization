@@ -1,4 +1,4 @@
-![example](http://ogj9k5cjf.bkt.clouddn.com/circos.png)
+![example](outdir/circos.png)
 example: mapping reads to some candidate preys' mitogenome.
 
 #### Summary
