@@ -99,6 +99,12 @@ now, you can run it by:
 perl draw_circos_for_mitogenome_auto_depth.pl -gb data/SRR611174_mitoscaf.fa.gbf -conf mitogenome.auto_depth.conf
 
 ```
+#### Note
+
+##### The logic to use depth information
+
+If you set "depth_file = xxx" and "run_map = yes" in the same time, it will directly use the existing depth file; otherwise, if you set the "run_map = yes", it will retrieve the fastq file path from "fq = xxx_1.fq, xxx_2.fq", and then run bwa mapping to generate depth file.
+
 
 #### See more
 recommend some good learning resources:

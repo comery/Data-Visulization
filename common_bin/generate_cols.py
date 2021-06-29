@@ -23,17 +23,15 @@ if len(sys.argv) < 3:
     print(usage)
     print(note)
     exit()
-elif sys.argv[2] is not 'l' or sys.argv[2] is not 'm':
+elif sys.argv[2] != 'l' or sys.argv[2] != 'm':
     print(usage)
     print(note)
 
 def give_color(n):
-    """ colors theme  """""
+    """ colors theme
+    "colors theme is designed by palettable. see more:http://colorbrewer2.org"
+    """
     colors = []
-    print(
-            "colors theme is designed by palettable." +\
-            " \nsee more:http://colorbrewer2.org\n"
-    )
 
     colors = palettable.cartocolors.qualitative.Antique_10.colors
     colors += palettable.cartocolors.qualitative.Bold_10.colors
@@ -68,7 +66,7 @@ if __name__ == '__main__':
         out = []
         for i in colors:
             out.append(rgb2hex(i))
-        if sys.argv[2] is 'l':
+        if sys.argv[2] == 'l':
             print(",".join(out))
         else:
             print("\n".join(out))
