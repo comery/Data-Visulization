@@ -1,11 +1,13 @@
 ### asm2ref
-This is a tiny pipeline to draw circos plot for genome alignment visualization.
+This is a tiny pipeline to draw dotplot and circos plot for genome alignment visualization.
+
+
 
 #### Prerequisites
 
 - python 3.6+
-- python module: palettable
-- unimap
+- python module: [palettable](https://pypi.org/project/palettable/)
+- [unimap](https://github.com/lh3/unimap)
 
 
 
@@ -13,6 +15,8 @@ This is a tiny pipeline to draw circos plot for genome alignment visualization.
 
 ```shell
 # generate overview dotplot
+# NOTE: you can use other alinger to replace unimap to generate PAF file, such as minimap2, winnowmap.
+
 Usage : run_asm2ref_unimap_links.sh ref.fasta query.fasta outprex
 
 # generate circos plot
