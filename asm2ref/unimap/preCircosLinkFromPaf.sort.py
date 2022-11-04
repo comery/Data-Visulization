@@ -96,6 +96,8 @@ def main(args):
             qry_length = int(tmp[1])
             ref_id = tmp[5]
             qry_id = tmp[0]
+            if ref_id == qry_id:
+                sys.exit(f"the ref_id must differ from qry_id")
             scaf_length[ref_id] = ref_length
             scaf_length[qry_id] = qry_length
             # make all positive strand
